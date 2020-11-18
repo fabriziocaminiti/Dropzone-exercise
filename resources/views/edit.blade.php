@@ -6,28 +6,30 @@
             <div class="card">
                 <div class="card-header">{{ __('Prodotto') }}</div>
                 @if (session ('message'))
-            <div class="alert-success mt-5">
+            <div class="alert-success col-4">
                 {{session ('message')}}
             </div>
             @endif
                 <div class="card-body">
-                  <form action="{{route('product.create')}}" method="POST" enctype="multipart/form-data">
+                  <form action="{{route('product.update',compact('product'))}}" method="POST" enctype="multipart/form-data">
                   @csrf
+                  @method('PUT')
+                  <h2>Modifica dati:</h2>
                   <div class="form-group">
-                    <label for="Name">Name</label>
-                    <input type="name" name="name" class="form-control" id="Name" placeholder="Password">
+                    <label for="name">Name</label>
+                    <input type="name" name="name" value="{{old($product->name)}}" class="form-control" id="Name" placeholder="name">
                  </div>
                  <div class="form-group">
                     <label for="brand">Brand</label>
-                    <input type="brand" name="brand" class="form-control" id="brand" placeholder="brand">
+                    <input type="brand" name="brand" value="{{old($product->brand)}}"  class="form-control" id="brand" placeholder="brand">
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="price" name="price" class="form-control" id="price" placeholder="price">
+                    <input type="number" name="price" value="{{old($product->price)}}"  class="form-control" id="price" placeholder="price">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label><br>
-                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                    <textarea name="description" value="{{old($product->description)}}"  id="description" cols="30" rows="10"></textarea>
                 <div class="form-group">
                 <button type="submit">Salva Prodotto</button>
                 </div>
