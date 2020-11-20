@@ -14,6 +14,9 @@
     </p>
     <p class="card-text">Tutto al prezzo di: <small>{{$product->description}}</small>
     </p>
+    @foreach($product->images as $image)
+    <img src="{{Storage::url($image->src)}}" width="200" alt="">
+    @endforeach
     <div class="col-6">
  <a class="btn btn-primary mt-4 mb-3" href="{{route('edit',compact('product'))}}" type="submit" role="button">Modifica dati</a>
  </div>

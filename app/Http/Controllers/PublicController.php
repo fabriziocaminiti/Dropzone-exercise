@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 
 class PublicController extends Controller
@@ -11,6 +12,7 @@ class PublicController extends Controller
    {
        return view('index');
    }
+
    public function store(Request $request)
    {
        Product::create([
@@ -28,6 +30,7 @@ class PublicController extends Controller
    }
    public function edit(Product $product)
    {
+       $products=Product::all();
        return view('edit',compact('product'));
    }
 
@@ -36,5 +39,16 @@ class PublicController extends Controller
       $product->update($request->all());
 
       return redirect()->back()->with('message','I dati sono stati modificati');
+   }
+   public function uploadProductImage(Request $request, $id)
+   {
+       
+        $filepath = $request->file('file')->store('public/product/images');
+        $product = Product::find($id);
+        $product->images()->create([
+            'src' => $filepath
+         ]); 
+         
+         return "ok";
    }
 }

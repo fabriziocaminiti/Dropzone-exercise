@@ -14,3 +14,4 @@ Route::get('/articoli', [App\Http\Controllers\PublicController::class, 'show'])-
 Route::post('/product', [App\Http\Controllers\PublicController::class, 'store'])->name('product.create');
 Route::get('/modifica/{product}',[App\Http\Controllers\PublicController::class,'edit'])->name('edit');
 Route::put('/inserisci/{product}',[App\Http\Controllers\PublicController::class,'update'])->name('product.update');
+Route::post('/articoli/{product}/images',[App\Http\Controllers\PublicController::class,'uploadProductImage'])->name('product.images.upload');

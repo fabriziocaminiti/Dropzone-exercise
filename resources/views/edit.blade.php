@@ -30,10 +30,17 @@
                 <div class="form-group">
                     <label for="description">Description</label><br>
                     <textarea name="description" value="{{old($product->description)}}"  id="description" cols="30" rows="10"></textarea>
+                </div>    
                 <div class="form-group">
                 <button type="submit">Salva Prodotto</button>
                 </div>
                 </form>
+                <form action="{{route('product.images.upload',compact('product'))}}" class="dropzone">
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+                </form>
+                <a href="{{route('show', compact('product'))}}">Mostra prodotto</a>
                 </div>
             </div>
         </div>
