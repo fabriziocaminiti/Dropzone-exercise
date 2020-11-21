@@ -53248,9 +53248,56 @@ module.exports = function(module) {
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+var Dropzone = __webpack_require__(/*! dropzone */ "./node_modules/dropzone/dist/dropzone.js");
+
+var _require = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"),
+    values = _require.values;
+
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Dropzone = __webpack_require__(/*! dropzone */ "./node_modules/dropzone/dist/dropzone.js");
+Dropzone.autoDiscover = false;
+$(function () {
+  var csrfToken = $('meta[name="csrf-token"]').attr('content');
+  var dropzones = $(".myDropzone");
+  dropzones.each(function (i, dropzone) {
+    var url = dropzone.getAttribute('action_url');
+    var initUrl = dropzone.getAttribute('init-url');
+    var deleteUrl = dropzone.getAttribute('delete-url');
+    var config = {
+      url: url,
+      addRemoveLinks: true,
+      params: {
+        _token: csrfToken
+      },
+      init: function init() {
+        $.get(initUrl, function (currentImages) {
+          $.each(currentImages, function (key, image) {
+            var file = {
+              id_image: image.id
+            };
+            myDropzone.options.addedfile.call(myDropzone, file);
+            myDropzone.options.thumbnail.call(myDropzone, file, image.src);
+          });
+        });
+      },
+      removedfile: function removedfile(file) {
+        $.ajax({
+          url: deleteUrl + file.id_image,
+          type: 'DELETE',
+          data: {
+            _token: csrfToken
+          },
+          success: function success() {
+            $("#messages").append("<div class=\"alert-success col-4\">\n                  Immagine cancellata con successo\n              </div>");
+            file.previewElement.remove();
+          }
+        });
+      }
+    };
+    var myDropzone = new Dropzone(dropzone, config);
+  });
+});
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /**
  * The following block of code may be used to automatically register your

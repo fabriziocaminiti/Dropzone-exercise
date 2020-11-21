@@ -4,9 +4,69 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const Dropzone = require('dropzone');
+const { values } = require('lodash');
+
 require('./bootstrap');
 
 window.Dropzone=require('dropzone');
+Dropzone.autoDiscover = false;
+
+$(function () {
+   let csrfToken = $('meta[name="csrf-token"]').attr('content'); 
+   
+   let dropzones = $(".myDropzone");
+
+   
+   dropzones.each((i, dropzone)=>{
+    
+    let url = dropzone.getAttribute('action_url');
+    let initUrl = dropzone.getAttribute('init-url');
+    let deleteUrl = dropzone.getAttribute('delete-url');
+     let config = {
+         url: url,
+         addRemoveLinks: true,
+
+         params: {
+
+         _token: csrfToken,
+         },
+         init: function(){
+            $.get(initUrl, function(currentImages) {
+              
+              $.each(currentImages, function (key, image) {
+
+                  let file = {
+                      id_image:image.id
+                  };
+                  myDropzone.options.addedfile.call(myDropzone, file);
+                  myDropzone.options.thumbnail.call(myDropzone, file, image.src);                 
+              });
+            
+         });  
+         },
+         removedfile: function (file) {
+            $.ajax({
+                url: deleteUrl + file.id_image,
+                type: 'DELETE',
+                data:{
+                _token: csrfToken,
+                },
+                success: function(){
+                  $("#messages").append(`<div class="alert-success col-4">
+                  Immagine cancellata con successo
+              </div>`);
+
+              file.previewElement.remove();
+                }
+            });
+         }
+     }
+    let myDropzone =  new Dropzone(dropzone, config);
+   });
+});
+
+
 window.Vue = require('vue');
 
 /**

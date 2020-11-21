@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PublicController extends Controller
 {
@@ -50,5 +51,25 @@ class PublicController extends Controller
          ]); 
          
          return "ok";
+   }
+   public function getProductImage($id)
+   {
+    $product = Product::find($id);
+   
+    $result = [];
+   
+    foreach($product->images as $image){
+     $result[] = [
+     "id"=>$image->id,
+    "src"=> Storage::url($image->src)
+      ];
+    }
+   
+    return response()->json($result);
+   }
+
+   public function deleteProductImage($id, $id_image)
+   {
+       ProductImage::destroy($id_image);
    }
 }

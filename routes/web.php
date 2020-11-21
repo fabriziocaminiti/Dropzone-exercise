@@ -15,3 +15,5 @@ Route::post('/product', [App\Http\Controllers\PublicController::class, 'store'])
 Route::get('/modifica/{product}',[App\Http\Controllers\PublicController::class,'edit'])->name('edit');
 Route::put('/inserisci/{product}',[App\Http\Controllers\PublicController::class,'update'])->name('product.update');
 Route::post('/articoli/{product}/images',[App\Http\Controllers\PublicController::class,'uploadProductImage'])->name('product.images.upload');
+Route::get('/articoli/{product}/images',[App\Http\Controllers\PublicController::class,'getProductImage'])->name('product.images.get');
+Route::delete('/articoli/{id}/images/{id_image}',[App\Http\Controllers\PublicController::class,'deleteProductImage'])->name('product.images.delete');
